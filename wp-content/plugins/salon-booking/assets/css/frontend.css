@@ -1,0 +1,124 @@
+/*
+ * CSS frontend của plugin: danh sách dịch vụ (shortcode + block) và widget giờ mở cửa.
+ *
+ * Plugin KHÔNG được giả định theme nào đang bật → dùng class riêng (salon-services__*),
+ * và chỉ "mượn" biến màu của theme nếu có: var(--color-primary, <màu dự phòng>).
+ */
+
+.salon-services {
+	--salon-accent: var(--color-primary, #b4566e);
+	--salon-border: var(--color-border, #e5e5e5);
+	list-style: none;
+	margin: 0 0 1.5rem;
+	padding: 0;
+	display: grid;
+	gap: 1.25rem;
+	grid-template-columns: 1fr; /* mobile: luôn 1 cột */
+}
+
+@media (min-width: 600px) {
+	.salon-services--cols-2,
+	.salon-services--cols-3,
+	.salon-services--cols-4 { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 900px) {
+	.salon-services--cols-3 { grid-template-columns: repeat(3, 1fr); }
+	.salon-services--cols-4 { grid-template-columns: repeat(4, 1fr); }
+}
+
+.salon-services__item {
+	display: flex;
+	flex-direction: column;
+	border: 1px solid var(--salon-border);
+	border-radius: 12px;
+	overflow: hidden;
+	background: #fff;
+	color: #2d2327;
+}
+
+.salon-services__media { display: block; text-decoration: none; }
+
+.salon-services__media img,
+.salon-services__placeholder {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	width: 100%;
+	aspect-ratio: 3 / 2;
+	object-fit: cover;
+	background: var(--color-bg-alt, #f6f0ee);
+	color: var(--salon-accent);
+	font-size: 2.5rem;
+}
+
+.salon-services__body { padding: 1rem 1.1rem 1.2rem; display: flex; flex-direction: column; gap: 0.4rem; flex: 1; }
+.salon-services__title { margin: 0; font-size: 1.1rem; }
+.salon-services__title a { color: inherit; text-decoration: none; }
+.salon-services__title a:hover { color: var(--salon-accent); }
+.salon-services__meta { margin: 0; color: #6f6266; }
+.salon-services__meta strong { color: var(--salon-accent); }
+
+.salon-services__book {
+	margin-top: auto;
+	align-self: flex-start;
+	color: var(--salon-accent);
+	font-weight: 600;
+	text-decoration: none;
+}
+.salon-services__book::after { content: " →"; }
+
+.salon-services__empty { color: #6f6266; font-style: italic; }
+
+/* 1 cột (thường dùng ở sidebar): dạng danh sách gọn, ảnh vuông nhỏ bên trái */
+.salon-services--cols-1 { gap: 0.75rem; }
+.salon-services--cols-1 .salon-services__item { flex-direction: row; align-items: center; }
+.salon-services--cols-1 .salon-services__media { flex: 0 0 84px; align-self: stretch; }
+.salon-services--cols-1 .salon-services__media img,
+.salon-services--cols-1 .salon-services__placeholder { aspect-ratio: 1 / 1; height: 100%; font-size: 1.6rem; }
+.salon-services--cols-1 .salon-services__body { padding: 0.6rem 0.9rem; gap: 0.2rem; }
+.salon-services--cols-1 .salon-services__title { font-size: 1rem; }
+.salon-services--cols-1 .salon-services__book { font-size: 0.9rem; }
+
+/* Widget giờ mở cửa */
+.salon-hours p { margin: 0 0 0.5rem; }
+.salon-hours__time { font-size: 1.15rem; font-weight: 700; }
+.salon-hours__time span { font-size: 0.85rem; font-weight: 400; color: #6f6266; }
+.salon-hours__status { display: inline-block; padding: 0.15rem 0.6rem; border-radius: 99px; font-size: 0.85rem; font-weight: 600; }
+.salon-hours__status--open { background: #e3f4e8; color: #1e6b37; }
+.salon-hours__status--closed { background: #f6e4e4; color: #9b2c2c; }
+.salon-hours__button { display: block; margin-top: 0.75rem; color: var(--color-primary, #b4566e); font-weight: 600; }
+
+/* Form đặt lịch (Phần 7) */
+.salon-form-wrap { --salon-accent: var(--color-primary, #b4566e); --salon-border: var(--color-border, #e5e5e5); }
+.salon-form { display: grid; gap: 1.25rem; }
+.salon-form__group { margin: 0; padding: 1rem 1.25rem 0.25rem; border: 1px solid var(--salon-border); border-radius: 12px; }
+.salon-form__group legend { padding: 0 0.4rem; font-weight: 700; }
+.salon-form__row { display: grid; gap: 0 1rem; }
+@media (min-width: 600px) { .salon-form__row { grid-template-columns: 1fr 1fr; } }
+.salon-form__field { margin: 0 0 1rem; display: flex; flex-direction: column; gap: 0.35rem; }
+.salon-form__field label { font-weight: 600; }
+.salon-form__req { color: #9b2c2c; }
+.salon-form__optional, .salon-form__hint { font-weight: 400; color: #6f6266; font-size: 0.9rem; }
+.salon-form__hint { margin: -0.5rem 0 1rem; }
+.salon-form input, .salon-form select, .salon-form textarea {
+	width: 100%; box-sizing: border-box; padding: 0.6rem 0.75rem; font: inherit;
+	border: 1px solid #c9bcbf; border-radius: 8px; background: #fff; color: inherit;
+}
+.salon-form input:focus, .salon-form select:focus, .salon-form textarea:focus { outline: 2px solid var(--salon-accent); outline-offset: 1px; }
+.salon-form [aria-invalid="true"] { border-color: #9b2c2c; background: #fff8f8; }
+.salon-form__error { margin: 0; color: #9b2c2c; font-size: 0.9rem; }
+.salon-form__hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+.salon-form__actions { margin: 0; }
+.salon-form__submit {
+	padding: 0.75rem 1.5rem; border: 0; border-radius: 99px; cursor: pointer;
+	background: var(--salon-accent); color: #fff; font: inherit; font-weight: 700;
+}
+.salon-form__submit:hover { filter: brightness(0.9); }
+.salon-form__notice { margin: 0 0 1.25rem; padding: 1rem 1.25rem; border-radius: 12px; border: 1px solid; }
+.salon-form__notice p:first-child { margin-top: 0; }
+.salon-form__notice ul { margin: 0.5rem 0 0; padding-left: 1.25rem; }
+.salon-form__notice--error { background: #fdf2f2; border-color: #e9b4b4; color: #7a2323; }
+.salon-form__notice--error a { color: inherit; }
+.salon-form__notice--success { background: #eef8f1; border-color: #b5dfc2; color: #1e4d2b; }
+.salon-form__title { margin: 0 0 0.5rem; font-size: 1.3rem; }

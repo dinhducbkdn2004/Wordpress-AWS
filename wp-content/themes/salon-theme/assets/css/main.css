@@ -1,0 +1,376 @@
+/* ==========================================================================
+   Salon Theme — main.css
+   Mobile-first: style mặc định cho màn nhỏ, @media (min-width) mở rộng cho màn lớn.
+   ========================================================================== */
+
+:root {
+	--color-primary: #b4566e;       /* hồng đất */
+	--color-primary-dark: #8e3f54;
+	--color-text: #2d2327;
+	--color-muted: #6f6266;
+	--color-bg: #ffffff;
+	--color-bg-alt: #fbf4f1;        /* be hồng nhạt */
+	--color-border: #eadfdb;
+	--radius: 14px;
+	--shadow: 0 6px 24px rgba(45, 35, 39, 0.08);
+	--container: 1140px;
+	--gutter: 16px;
+	--font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+	/* Georgia KHÔNG đủ glyph tiếng Việt (dấu bị tách: "Nố i") → chọn font hỗ trợ Vietnamese */
+	--font-heading: "Noto Serif", "Times New Roman", Times, serif;
+}
+
+/* ---------- Nền tảng ---------- */
+*,
+*::before,
+*::after { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+	margin: 0;
+	font-family: var(--font-body);
+	font-size: 1rem;
+	line-height: 1.65;
+	color: var(--color-text);
+	background: var(--color-bg);
+}
+
+img { max-width: 100%; height: auto; display: block; }
+
+a { color: var(--color-primary); }
+a:hover { color: var(--color-primary-dark); }
+
+h1, h2, h3 {
+	font-family: var(--font-heading);
+	line-height: 1.25;
+	margin: 0 0 0.5em;
+	font-weight: 600;
+}
+h1 { font-size: clamp(1.9rem, 5vw, 2.8rem); }
+h2 { font-size: clamp(1.5rem, 3.5vw, 2rem); }
+h3 { font-size: 1.2rem; }
+
+.container {
+	width: 100%;
+	max-width: var(--container);
+	margin: 0 auto;
+	padding: 0 var(--gutter);
+}
+.container-narrow { max-width: 760px; }
+.section { padding-top: 3rem; padding-bottom: 3rem; }
+.section-alt { background: var(--color-bg-alt); }
+.text-center { text-align: center; }
+
+/* Ẩn khỏi mắt nhưng trình đọc màn hình vẫn đọc (chuẩn WordPress) */
+.screen-reader-text {
+	border: 0;
+	clip-path: inset(50%);
+	height: 1px;
+	margin: -1px;
+	overflow: hidden;
+	padding: 0;
+	position: absolute !important;
+	width: 1px;
+	word-wrap: normal !important;
+}
+.skip-link:focus {
+	clip-path: none;
+	height: auto;
+	width: auto;
+	left: 8px;
+	top: 8px;
+	z-index: 1000;
+	padding: 8px 16px;
+	background: #fff;
+}
+
+/* ---------- Nút ---------- */
+.button {
+	display: inline-block;
+	padding: 0.7em 1.4em;
+	border: 2px solid var(--color-primary);
+	border-radius: 999px;
+	background: var(--color-primary);
+	color: #fff;
+	font-weight: 600;
+	text-decoration: none;
+	transition: background 0.2s, color 0.2s;
+}
+.button:hover { background: var(--color-primary-dark); border-color: var(--color-primary-dark); color: #fff; }
+.button-outline { background: transparent; color: var(--color-primary); }
+.button-outline:hover { background: var(--color-primary); color: #fff; }
+.button-light { background: #fff; border-color: #fff; color: var(--color-primary); }
+.button-light:hover { background: transparent; color: #fff; border-color: #fff; }
+
+/* ---------- Header & menu ---------- */
+.site-header {
+	position: sticky;
+	top: 0;
+	z-index: 100;
+	background: rgba(255, 255, 255, 0.96);
+	border-bottom: 1px solid var(--color-border);
+}
+.admin-bar .site-header { top: 46px; }          /* chừa chỗ cho thanh admin khi đăng nhập */
+
+.header-inner {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 1rem;
+	min-height: 64px;
+}
+.site-title {
+	font-family: var(--font-heading);
+	font-size: 1.4rem;
+	font-weight: 700;
+	color: var(--color-text);
+	text-decoration: none;
+}
+
+.menu-toggle {
+	display: inline-flex;
+	align-items: center;
+	justify-content: center;
+	width: 44px;
+	height: 44px;                                  /* vùng chạm tối thiểu trên mobile */
+	border: 0;
+	background: transparent;
+	cursor: pointer;
+}
+.menu-toggle-icon,
+.menu-toggle-icon::before,
+.menu-toggle-icon::after {
+	display: block;
+	width: 22px;
+	height: 2px;
+	background: var(--color-text);
+	position: relative;
+	transition: transform 0.2s;
+}
+.menu-toggle-icon::before,
+.menu-toggle-icon::after { content: ""; position: absolute; left: 0; }
+.menu-toggle-icon::before { top: -7px; }
+.menu-toggle-icon::after { top: 7px; }
+.menu-toggle[aria-expanded="true"] .menu-toggle-icon { background: transparent; }
+.menu-toggle[aria-expanded="true"] .menu-toggle-icon::before { transform: translateY(7px) rotate(45deg); }
+.menu-toggle[aria-expanded="true"] .menu-toggle-icon::after { transform: translateY(-7px) rotate(-45deg); }
+
+/* Mobile: menu ẩn, mở thành khối dưới header */
+.main-navigation {
+	display: none;
+	position: absolute;
+	top: 100%;
+	left: 0;
+	right: 0;
+	padding: 1rem var(--gutter) 1.5rem;
+	background: #fff;
+	border-bottom: 1px solid var(--color-border);
+	box-shadow: var(--shadow);
+}
+.main-navigation.is-open { display: block; }
+.main-navigation ul { list-style: none; margin: 0 0 1rem; padding: 0; }
+.main-navigation a:not(.button) {
+	display: block;
+	padding: 0.6rem 0;
+	color: var(--color-text);
+	text-decoration: none;
+	font-weight: 500;
+}
+.main-navigation .current-menu-item > a,
+.main-navigation a:not(.button):hover { color: var(--color-primary); }
+
+/* ---------- Hero ---------- */
+.hero {
+	background: linear-gradient(135deg, #fbe9e7 0%, #f6dfe6 50%, #fbf4f1 100%);
+	padding: 4rem 0;
+}
+.hero-inner { max-width: 760px; }
+.eyebrow {
+	text-transform: uppercase;
+	letter-spacing: 0.12em;
+	font-size: 0.8rem;
+	font-weight: 600;
+	color: var(--color-primary);
+	margin: 0 0 0.5rem;
+}
+.eyebrow a { text-decoration: none; }
+.hero-lead { font-size: 1.15rem; color: var(--color-muted); }
+.hero-actions { display: flex; flex-wrap: wrap; gap: 0.75rem; margin-top: 1.5rem; }
+
+/* ---------- Section header ---------- */
+.section-header { margin-bottom: 2rem; }
+.section-header p,
+.page-description { color: var(--color-muted); margin: 0; }
+.page-header { margin-bottom: 2rem; }
+
+/* ---------- Card dịch vụ ---------- */
+.card-grid {
+	display: grid;
+	grid-template-columns: 1fr;                    /* mobile: 1 cột */
+	gap: 1.5rem;
+}
+.card {
+	display: flex;
+	flex-direction: column;
+	background: #fff;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+	overflow: hidden;
+	box-shadow: var(--shadow);
+	transition: transform 0.2s;
+}
+.card:hover { transform: translateY(-3px); }
+.card-media { display: block; text-decoration: none; }
+.card-media img,
+.card-media .placeholder-media { aspect-ratio: 3 / 2; width: 100%; object-fit: cover; }
+.card-body { padding: 1.25rem; }
+.card-title { margin-bottom: 0.25rem; }
+.card-title a { color: var(--color-text); text-decoration: none; }
+.card-title a:hover { color: var(--color-primary); }
+.card-excerpt { color: var(--color-muted); margin: 0.5rem 0 0; font-size: 0.95rem; }
+
+.placeholder-media {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: linear-gradient(135deg, #f3c9d3, #e8a5b6);
+	color: #fff;
+	font-family: var(--font-heading);
+	font-size: 3rem;
+}
+
+.service-meta { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin: 0; }
+.service-price { font-weight: 700; color: var(--color-primary); }
+.service-duration { color: var(--color-muted); }
+.service-duration::before { content: "⏱ "; }
+
+/* ---------- Chi tiết dịch vụ ---------- */
+.service-detail { display: grid; gap: 2rem; }
+.service-media img,
+.service-media .placeholder-media { border-radius: var(--radius); aspect-ratio: 4 / 3; width: 100%; object-fit: cover; }
+.service-detail .service-meta { font-size: 1.15rem; margin-bottom: 1rem; }
+.entry-content { margin-bottom: 1.5rem; }
+
+/* ---------- Widget area (register_sidebar: before_widget = <section class="widget ...">) ---------- */
+.widget-area { margin-top: 2rem; display: grid; gap: 1.25rem; }
+.widget {
+	padding: 1.25rem;
+	border: 1px solid var(--color-border);
+	border-radius: var(--radius);
+	background: var(--color-bg-alt);
+}
+.widget-title,
+.widget .wp-block-heading { font-size: 1.15rem; margin: 0 0 0.75rem; }
+.widget > :last-child,
+.widget .salon-services { margin-bottom: 0; } /* theme chỉnh khoảng cách trong ngữ cảnh của nó; plugin không cần biết */
+
+/* ---------- Features & staff ---------- */
+.features { display: grid; gap: 1.5rem; }
+.feature h3 { color: var(--color-primary); }
+.feature p { margin: 0; color: var(--color-muted); }
+
+.staff-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.5rem; }
+.staff-card { text-align: center; }
+.staff-card p { color: var(--color-muted); margin: 0; font-size: 0.95rem; }
+.avatar {
+	width: 96px;
+	height: 96px;
+	margin: 0 auto 0.75rem;
+	border-radius: 50%;
+	overflow: hidden;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	background: var(--color-bg-alt);
+	color: var(--color-primary);
+	font-family: var(--font-heading);
+	font-size: 2rem;
+}
+.avatar img { width: 100%; height: 100%; object-fit: cover; }
+
+/* ---------- CTA band ---------- */
+.cta-band { background: var(--color-primary); color: #fff; padding: 3rem 0; }
+.cta-inner { display: flex; flex-direction: column; gap: 1rem; align-items: flex-start; }
+.cta-inner h2 { margin: 0; }
+
+/* ---------- Blog ---------- */
+.post-item { padding: 1.5rem 0; border-bottom: 1px solid var(--color-border); }
+.post-item-title a { color: var(--color-text); text-decoration: none; }
+.entry-meta { color: var(--color-muted); font-size: 0.9rem; margin: 0 0 0.5rem; }
+.entry-thumbnail { margin-bottom: 1.5rem; }
+.entry-thumbnail img { border-radius: var(--radius); }
+
+/* Phân trang của the_posts_pagination() */
+.pagination .nav-links { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 2rem; }
+.pagination .page-numbers {
+	padding: 0.4rem 0.9rem;
+	border: 1px solid var(--color-border);
+	border-radius: 8px;
+	text-decoration: none;
+}
+.pagination .current { background: var(--color-primary); border-color: var(--color-primary); color: #fff; }
+
+/* ---------- Footer ---------- */
+.site-footer { background: #2d2327; color: #e9dfe2; padding: 2.5rem 0; font-size: 0.95rem; }
+.site-footer a { color: #fff; }
+.footer-inner { display: grid; gap: 1rem; }
+.footer-title { font-family: var(--font-heading); font-size: 1.2rem; color: #fff; margin: 0; }
+.site-footer p { margin: 0; }
+.site-footer ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 1rem; }
+.copyright { color: #b9a9ae; }
+
+/* ---------- Form tìm kiếm ---------- */
+.search-form { display: flex; gap: 0.5rem; justify-content: center; margin: 1rem 0 1.5rem; }
+.search-form input[type="search"] {
+	padding: 0.6rem 0.9rem;
+	border: 1px solid var(--color-border);
+	border-radius: 999px;
+	min-width: 0;
+}
+.search-submit {
+	padding: 0.6rem 1.2rem;
+	border: 0;
+	border-radius: 999px;
+	background: var(--color-primary);
+	color: #fff;
+	cursor: pointer;
+}
+
+/* ==========================================================================
+   Tablet trở lên
+   ========================================================================== */
+@media (min-width: 600px) {
+	.card-grid { grid-template-columns: repeat(2, 1fr); }
+	.features { grid-template-columns: repeat(3, 1fr); }
+	.staff-grid { grid-template-columns: repeat(4, 1fr); }
+	.cta-inner { flex-direction: row; align-items: center; justify-content: space-between; }
+}
+
+@media (min-width: 783px) {
+	.admin-bar .site-header { top: 32px; }       /* admin bar cao 32px trên desktop */
+}
+
+/* ==========================================================================
+   Desktop: menu nằm ngang, ẩn nút hamburger
+   ========================================================================== */
+@media (min-width: 900px) {
+	.menu-toggle { display: none; }
+	.main-navigation {
+		display: flex;
+		align-items: center;
+		gap: 1.5rem;
+		position: static;
+		padding: 0;
+		border: 0;
+		box-shadow: none;
+		background: transparent;
+	}
+	.main-navigation ul { display: flex; gap: 1.5rem; margin: 0; }
+	.main-navigation a:not(.button) { padding: 0.5rem 0; }
+
+	.card-grid { grid-template-columns: repeat(3, 1fr); }
+	.service-detail { grid-template-columns: 1fr 1fr; align-items: start; }
+	.hero { padding: 6rem 0; }
+	.footer-inner { grid-template-columns: 2fr 2fr 1fr; align-items: center; }
+}

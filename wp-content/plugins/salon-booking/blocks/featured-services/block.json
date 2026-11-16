@@ -1,0 +1,30 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "salon/featured-services",
+	"version": "0.3.0",
+	"title": "Dịch vụ nổi bật",
+	"category": "widgets",
+	"icon": "art",
+	"description": "Lưới dịch vụ của salon, lọc theo loại dịch vụ. Giá luôn cập nhật theo dữ liệu mới nhất.",
+	"keywords": [ "salon", "dịch vụ", "nail", "bảng giá" ],
+	"textdomain": "salon-booking",
+	"attributes": {
+		"count": { "type": "integer", "default": 3 },
+		"columns": { "type": "integer", "default": 3 },
+		"category": { "type": "string", "default": "" },
+		"showPrice": { "type": "boolean", "default": true }
+	},
+	"supports": {
+		"html": false,
+		"align": [ "wide", "full" ],
+		"spacing": { "margin": true, "padding": true },
+		"color": { "background": true, "text": true }
+	},
+	"example": {
+		"attributes": { "count": 2, "columns": 2 }
+	},
+	"editorScript": "file:./index.js",
+	"style": "salon-frontend",
+	"render": "file:./render.php"
+}
