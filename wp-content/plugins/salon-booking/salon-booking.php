@@ -15,6 +15,8 @@
  * @package SalonBooking
  */
 
+// CI/CD test: first automatic deployment
+
 defined( 'ABSPATH' ) || exit; // Chặn gọi trực tiếp http://.../salon-booking.php
 
 const SALON_VERSION    = '0.4.0'; // version của plugin → dùng cho cache-busting asset
